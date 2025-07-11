@@ -193,4 +193,4 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="teal")) as demo:
     train_btn.click(handle_training, inputs=[user_state], outputs=[train_status])
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
