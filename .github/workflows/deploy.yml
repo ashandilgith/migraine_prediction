@@ -1,4 +1,4 @@
-name: Deploy Personalized Forecaster to Hugging Face Spaces
+name: Deploy Personalized Forecaster Space
 
 on:
   push:
@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,9 +25,16 @@ jobs:
       - name: Train initial model for example user
         run: python train.py
 
-      - name: Push to Hugging Face Hub
-        uses: huggingface/push-to-hub@v0
-        with:
-          repo_id: "ashandilgith/migraine_prediction"
-          token: "${{ secrets.HF_TOKEN }}"
-          commit_message: "Deploy from GitHub Actions"
+      - name: Deploy to Hugging Face Space
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          git clone https://ashandilgith:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/ashandilgith/migraine_prediction
+
+          cp -r * migraine_prediction/
+
+          cd migraine_prediction
+          git add .
+          git commit -m "Deploy from GitHub Actions"
+          git push
