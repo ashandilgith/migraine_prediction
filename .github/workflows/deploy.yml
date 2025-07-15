@@ -1,12 +1,13 @@
-name: Deploy Personalized Forecaster Space
+name: Deploy to Hugging Face Space
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  deploy-to-hf-space:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,21 +20,27 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate synthetic data for example user
+      - name: Run synthetic data generator
         run: python scripts/create_synthetic_data.py
-      
-      - name: Train initial model for example user
+
+      - name: Train model
         run: python train.py
 
-      - name: Deploy to Hugging Face Space
+      - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
+      - name: Clone Hugging Face Space repository
+        run: |
           git clone https://ashandilgith:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/ashandilgith/migraine_prediction
 
-          cp -r * migraine_prediction/
+      - name: Copy new files to Space repo
+        run: |
+          rsync -av --exclude='.git/' --exclude='.github/' --exclude='migraine_prediction/' ./ migraine_prediction/
 
+      - name: Commit and push to Space
+        run: |
           cd migraine_prediction
           git add .
           git commit -m "Deploy from GitHub Actions"
