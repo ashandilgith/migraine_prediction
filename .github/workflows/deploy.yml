@@ -28,12 +28,8 @@ jobs:
         run: python train.py
 
       - name: Push to Hugging Face Hub
-        uses: HazyResearch/push-to-hub@v1
+        uses: huggingface/push-to-hub@v0
         with:
           repo_id: "ashandilgith/migraine_prediction"
           token: "${{ secrets.HF_TOKEN }}"
-          local_dir: "."
-          repo_type: "space"
-          space_sdk: "gradio"
-          app_file: "app.py"
-          force_push: true
+          commit_message: "Deploy from GitHub Actions"
