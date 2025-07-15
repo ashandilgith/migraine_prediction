@@ -1,8 +1,10 @@
+---
 title: Migraine Gabay Forecaster
 emoji: 🧠
 colorFrom: teal
 colorTo: blue
 sdk: gradio
+sdk_version: 4.29.0
 app_file: app.py
 ---
 
