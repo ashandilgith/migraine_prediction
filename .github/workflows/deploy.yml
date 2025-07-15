@@ -1,0 +1,39 @@
+name: Deploy Personalized Forecaster to Hugging Face Spaces
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-to-hf-space:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate synthetic data for example user
+        run: python scripts/create_synthetic_data.py
+      
+      - name: Train initial model for example user
+        run: python train.py
+
+      - name: Push to Hugging Face Hub
+        uses: HazyResearch/push-to-hub@v1
+        with:
+          repo_id: "ashandilgith/migraine_prediction"
+          token: "${{ secrets.HF_TOKEN }}"
+          local_dir: "."
+          repo_type: "space"
+          space_sdk: "gradio"
+          app_file: "app.py"
+          force_push: true
