@@ -111,21 +111,10 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="teal")) as demo:
     user_state = gr.State(None)
 
     with gr.Row(visible=True) as login_view:
-        with gr.Column(scale=3, min_width=600):
-            gr.Image(
-                "https://images.pexels.com/photos/12689421/pexels-photo-12689421.jpeg",
-                label="Welcome", show_label=False, show_download_button=False, container=False, min_width=600
-            )
-        with gr.Column(scale=2, min_width=450):
-            gr.Markdown("## 👋 Hello champion! Welcome to Migraine Gabay")
-            gr.Markdown("""
-- 📊 **Log daily food, sleep, and migraine patterns for 30 days**
-- 🤖 **Train your own AI model to predict your migraine risks**
-- 🧠 **Get forecasts based on your personal triggers**
-            """)
-            gr.Markdown("&nbsp;")
-            username_input = gr.Textbox(label="Enter Your Username", placeholder="e.g., Mia Grayne")
-            login_btn = gr.Button("Login", variant="primary")
+        with gr.Column(scale=1, min_width=300):
+            gr.Markdown("# Welcome to Migraine Gabay")
+            username_input = gr.Textbox(label="Enter Your Username", placeholder="e.g., user_jane")
+            login_btn = gr.Button("Login")
             login_status = gr.Markdown("")
 
     with gr.Column(visible=False) as app_view:
